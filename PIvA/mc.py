@@ -49,7 +49,7 @@ def main(args):
     test_tensor = test_tensor.to(device)
 
     # generate systematic test set
-    granularity = 100
+    granularity = 500
     D_all = np.linspace(0.3, 3, granularity)
     T2_all = np.linspace(0.2, 7.5, granularity)
     signal = torch.zeros(D_all.shape[0], T2_all.shape[0], 16).cuda()
@@ -161,7 +161,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser('Mono-exponential Physics-Informed Variational Autoencoder (PI-VAE) for parameter estimation MRI data')
     parser.add_argument("--lr", type=float, default=3e-4, help="learning rate")
-    parser.add_argument("--epochs", type=int, default=50000, help="number of epochs")
+    parser.add_argument("--epochs", type=int, default=200000, help="number of epochs")
     parser.add_argument("--alpha", type=float, default=1e-5, help="alpha to mix the KL divergence with the MSE loss")
     parser.add_argument("--noise", type=float, default=0.05, help="noise std used in training and MC simulations")
     parser.add_argument("--experiment", type=str, default='exp1', help="experiment name")
