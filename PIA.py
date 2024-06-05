@@ -16,10 +16,10 @@ class PIA(nn.Module):
                 b_values = [0, 150, 1000, 1500],
                 TE_values = [0, 13, 93, 143],
                 hidden_dims: List = None,
-                predictor_depth=1):
+                predictor_depth=1,
+                device='cuda'):
         super(PIA, self).__init__()
 
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256, 512]
         
@@ -33,6 +33,7 @@ class PIA(nn.Module):
         self.TE_values = TE_values
         self.softmax = torch.nn.Softmax(dim=1)
         self.relu = nn.ReLU()
+        self.device = device
 
         
 
@@ -119,7 +120,7 @@ class PIA(nn.Module):
                 S_lu = v[2]*torch.exp(-b/1000*D[2])*torch.exp(-TE/T2[2])
                 signal[:, ctr] = S_ep + S_st + S_lu
                 ctr += 1
-        return 1000*signal
+        return (1000*signal).to(self.device)
     
     
     def forward(self, x):
@@ -127,34 +128,11 @@ class PIA(nn.Module):
         return  [self.decode(D, T2, v), x, D, T2, v]
 
 
-    def loss_function(self, recons, x, PIDS, tissue_available=False):
-        if tissue_available:
-            pred_signal, pred_D, pred_T2, pred_v = recons
-            true_signal, true_D, true_T2, true_v = x
+    def loss_function(self, pred_signal, true_signal, weights=None):
 
-            loss_signal = F.mse_loss(pred_signal, true_signal)
-            loss_D = F.mse_loss(pred_D, true_D)
-            loss_T2 = F.mse_loss(pred_T2, true_T2)
-            loss_v = F.kl_div(pred_v, true_v)
-            loss = loss_signal + loss_D + 0.0001*loss_T2 + 0.2*loss_v
-
+        if weights is not None:
+            loss = torch.mean(weights * (pred_signal - true_signal) ** 2)
         else:
-            pred_signal = recons
-            true_signal = x
-            #loss = F.mse_loss(pred_signal, true_signal)
-            loss = torch.mean(PIDS * (pred_signal - true_signal) ** 2)
+            loss = F.mse_loss(pred_signal, true_signal)
 
         return loss
-
-
-class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
