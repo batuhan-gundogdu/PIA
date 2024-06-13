@@ -5,3 +5,6 @@ PIvA/plots
 PIvA/results
 PIvA/checkpoints
 PIvA/nohup.out
+plots/
+# xlsx files contain PHI, so they should not be pushed to git
+*.xlsx

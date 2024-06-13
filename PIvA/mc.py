@@ -12,7 +12,7 @@ from utils import get_batch_mono2D, generate, hybrid_fit_mono2D, scatterplot
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 import numpy as np
-from colorama import Fore
+from colorama import Fore # type: ignore
 
 def main(args):
 
@@ -150,11 +150,6 @@ def main(args):
                 # save model
                 torch.save(model.state_dict(), f'checkpoints/{args.experiment}_{epoch:05}.pt')
     f.close()
-
-
-
-
-
 
 
 
