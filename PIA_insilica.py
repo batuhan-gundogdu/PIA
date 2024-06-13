@@ -17,7 +17,7 @@ from tqdm import tqdm
 from scipy.stats import ttest_ind
 
 parser = argparse.ArgumentParser(description='Monte Carlo Experiments of PIA for diffusion-relaxation mode')
-parser.add_argument('--sample_size', type=int, default=25, help='Sample size for in-silica experiments')
+parser.add_argument('--sample_size', type=int, default=2500, help='Sample size for in-silica experiments')
 parser.add_argument('--noise_std', type=float, default=0.02, help='Depth of the predictor network')
 
 
@@ -38,7 +38,7 @@ def main(args):
     print(f'NLLS solution takes {end - start} seconds for {args.sample_size} samples')
     get_scores((v_test, D_test, T2_test), (v_NLLS, D_NLLS, T2_NLLS))
     print('Plotting the results...')
-    #plot_results((v_test, D_test, T2_test), (v_NLLS, D_NLLS, T2_NLLS), method='NLLS')
+    plot_results((v_test, D_test, T2_test), (v_NLLS, D_NLLS, T2_NLLS), method='NLLS')
     print('Now Testing with the PIA model...')
     PATH = 'pia_model.pt'
     model = torch.load(PATH)
@@ -49,11 +49,11 @@ def main(args):
     print(f'PIA takes {end - start} seconds for {args.sample_size} samples')
     print('Plotting the results for PIA...')
     get_scores((v_test, D_test, T2_test), (v, D, T2))
-    #plot_results((v_test, D_test, T2_test), (v, D, T2), method='PIA')
+    plot_results((v_test, D_test, T2_test), (v, D, T2), method='PIA')
     print('Comparing the results of PIA and NLLS (p-values)...')
     calculate_stats((v_test, D_test, T2_test), (v, D, T2), (v_NLLS, D_NLLS, T2_NLLS))
     print('Conducting Speed Tests')
-    test_tensor, D_test2, T2_test2, v_test, clean = get_batch(20, noise_sdt=args.noise_std)
+    test_tensor, D_test2, T2_test2, v_test, clean = get_batch(20000, noise_sdt=args.noise_std)
     test = test_tensor.detach().cpu().numpy()
     start = time.time()
     D, T2, v = hybrid_fit(test)
@@ -66,7 +66,7 @@ def main(args):
     print(f'PIA took {end - start} seconds for 20,000 samples')
     print('Now conducting Robustness Tests of PIA...')
     print('Stage 1: Testing with different levels of noise')
-    '''
+    
     noise_levels = [2*0.0001, 5*0.0001, 7*0.0001, 0.001, 2*0.001, 5*0.001, 7*0.001, 0.01, 0.02, 0.05, 0.07, 0.1]
     v_ep, v_st, v_lu, D_ep, D_st, D_lu, T2_ep, T2_st, T2_lu = [], [], [], [], [], [], [], [], []
     results_dict = {
@@ -116,7 +116,7 @@ def main(args):
             ax[m].grid(True)
         plt.savefig(f'plots/noise_response_{sequence_names[name]}.png')
         plt.close(fig)
-    '''
+    
     print('Plots saved in plots/ directory.')
     print('Stage 2: Testing with a different protocol')
     new_protocol_b_values = [0, 300, 600, 900]
