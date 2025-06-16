@@ -26,7 +26,7 @@ Author: Batuhan Gundogdu
 
 
 Redistribution and use for noncommercial purposes in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-1. The software is used solely for noncommercial purposes. It may not be used indirectly for commercial use, such as on a website that accepts advertising money for content. Noncommercial use does include use by a for-profit company in its research. For commercial use rights, contact The University of Chicago, Polsky Center for Entrepreneurship, and Innovation, at polskylicensing@uchicago.edu or call 773-702-1692 and inquire about Tech ID XX-X-XXX project.
+1. The software is used solely for noncommercial purposes. It may not be used indirectly for commercial use, such as on a website that accepts advertising money for content. Noncommercial use does include use by a for-profit company in its research. For commercial use rights, contact The University of Chicago, Polsky Center for Entrepreneurship, and Innovation, at polskylicensing@uchicago.edu or call 773-702-1692 and inquire about the project.
 2. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 3. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 4. Neither the name of The University of Chicago nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
